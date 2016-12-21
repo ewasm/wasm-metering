@@ -201,8 +201,8 @@ exports.meterJSON = (json, costTable, moduleStr = 'metering', fieldStr = 'usegas
 }
 
 exports.meterWASM = (wasm, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
-  let json = toolkit.wasm2json(wasm) 
-  json = exports.meterJSON(json, costTablem, moduleStr, fieldStr)
+  let json = toolkit.wasm2json(wasm)
+  json = exports.meterJSON(json, costTable, moduleStr, fieldStr)
   return {
     initailCost: json.initailCost,
     wasm: toolkit.json2wasm(json)
