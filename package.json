@@ -1,0 +1,42 @@
+{
+  "name": "wasm-metering",
+  "version": "0.1.0",
+  "description": "injects metering into a webassembly binary",
+  "main": "index.js",
+  "scripts": {
+    "coverage": "node --harmony ./node_modules/istanbul/lib/cli.js cover ./test/index.js",
+    "coveralls": "npm run coverage && coveralls <coverage/lcov.info",
+    "lint": "standard",
+    "test": "node --harmony ./test/index.js"
+  },
+  "author": "mjbecze <mjbecze@gmail.com>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "leb128": "0.0.0",
+    "wasm-json-toolkit": "0.0.2"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.4.1",
+    "standard": "^8.6.0",
+    "tape": "^4.6.3"
+  },
+  "keywords": [
+    "wasm",
+    "metering",
+    "webassembly"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ewasm/wasm-metering.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ewasm/wasm-metering/issues"
+  },
+  "homepage": "https://github.com/ewasm/wasm-metering",
+  "standard": {
+    "ignore": [
+      "test/wabt"
+    ]
+  }
+}
