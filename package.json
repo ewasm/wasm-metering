@@ -1,7 +1,7 @@
 {
   "name": "wasm-metering",
   "version": "0.1.0",
-  "description": "injects metering into a webassembly binary",
+  "description": "injects metering into webassembly binaries",
   "main": "index.js",
   "scripts": {
     "coverage": "node --harmony ./node_modules/istanbul/lib/cli.js cover ./test/index.js",
