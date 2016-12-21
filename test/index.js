@@ -1,6 +1,6 @@
 const fs = require('fs')
 const tape = require('tape')
-const metering = require('../').meter
+const metering = require('../').meterJSON
 const defaultCostTable = require('../defaultCostTable')
 let initCosts = require('./expected-out/initCosts.json')
 
@@ -20,7 +20,7 @@ tape('basic metering tests', t => {
     let meteredJson = metering(json, costTable)
     let expectedJson = require(`${__dirname}/expected-out/json/${file}`)
 
-    t.deepEquals(meteredJson.module[5], expectedJson[5], `${file} - should have the correct json`)
+    t.deepEquals(meteredJson.module, expectedJson, `${file} - should have the correct json`)
     t.equals(meteredJson.initialCost, initCosts[file])
   }
   t.end()

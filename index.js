@@ -1,8 +1,11 @@
-const text2json = require('wasm-json-toolkit').text2json
+const toolkit = require('wasm-json-toolkit')
+const text2json = toolkit.text2json
 const SECTION_IDS = require('wasm-json-toolkit/json2wasm').SECTION_IDS
 
+// gets the cost of an operation for entry in a section from the cost table
 function getCost (json, costTable = {}, defaultCost = 0) {
   let cost = 0
+  // finds the default cost
   defaultCost = costTable['DEFAULT'] !== undefined ? costTable['DEFAULT'] : 0
 
   if (typeof costTable === 'function') {
@@ -28,7 +31,66 @@ function getCost (json, costTable = {}, defaultCost = 0) {
   return cost
 }
 
-exports.meter = function meter (json, costTable) {
+// meters a single code entrie
+function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
+  function meteringStatement (cost, meteringImportIndex) {
+    return text2json(`i64.const ${cost} call ${meteringImportIndex}`)
+  }
+  function remapOp (op, funcIndex) {
+    if (op.name === 'call' && op.immediates >= funcIndex) {
+      op.immediates = (++op.immediates).toString()
+    }
+  }
+  function meterTheMeteringStatement () {
+    const code = meteringStatement(0, 0)
+    // sum the operations cost
+    return code.reduce(
+      (sum, op) => sum + getCost(op.name, costTable.code)
+      , 0)
+  }
+
+  // operations that can possible cause a branch
+  const branchingOps = new Set(['end', 'br', 'br_table', 'br_if', 'if', 'else', 'return', 'loop'])
+  const meteringOverHead = meterTheMeteringStatement()
+  let code = entry.code.slice()
+  let meteredCode = []
+
+  cost += getCost(entry.locals, costTable.local)
+
+  while (code.length) {
+    let i = 0
+
+    // meters a segment of wasm code
+    while (true) {
+      const op = code[i++]
+      remapOp(op, meterFuncIndex)
+
+      cost += getCost(op.name, costTable.code)
+      if (branchingOps.has(op.name)) {
+        break
+      }
+    }
+
+    // add the metering statement
+    if (cost !== 0) {
+      // add the cost of metering
+      cost += meteringOverHead
+      meteredCode = meteredCode
+        .concat(meteringStatement(cost, meterFuncIndex))
+    }
+
+    // start a new segment
+    meteredCode = meteredCode
+      .concat(code.slice(0, i))
+    code = code.slice(i)
+    cost = 0
+  }
+
+  entry.code = meteredCode
+  return entry
+}
+
+exports.meterJSON = (json, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
   function findSection (module, sectionName) {
     return module.find(section => section.name === sectionName)
   }
@@ -52,8 +114,8 @@ exports.meter = function meter (json, costTable) {
   }
 
   const importJson = {
-    'moduleStr': 'metering',
-    'fieldStr': 'usegas',
+    'moduleStr': moduleStr,
+    'fieldStr': fieldStr,
     'kind': 'function'
   }
   const importType = {
@@ -121,7 +183,7 @@ exports.meter = function meter (json, costTable) {
           const type = typeModule.entries[typeIndex]
           const cost = getCost(type, costTable.type)
 
-          exports.meterCodeEntry(entry, costTable.code, funcIndex, cost)
+          meterCodeEntry(entry, costTable.code, funcIndex, cost)
         }
         break
       default:
@@ -138,59 +200,11 @@ exports.meter = function meter (json, costTable) {
   }
 }
 
-exports.meterCodeEntry = (entry, costTable, meterFuncIndex, cost = 0) => {
-  function meteringStatement (cost, meteringImportIndex) {
-    return text2json(`i64.const ${cost} call ${meteringImportIndex}`)
+exports.meterWASM = (wasm, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
+  let json = toolkit.wasm2json(wasm) 
+  json = exports.meterJSON(json, costTablem, moduleStr, fieldStr)
+  return {
+    initailCost: json.initailCost,
+    wasm: toolkit.json2wasm(json)
   }
-  function remapOp (op, funcIndex) {
-    if (op.name === 'call' && op.immediates >= funcIndex) {
-      op.immediates = (++op.immediates).toString()
-    }
-  }
-  function meterTheMeteringStatement () {
-    const code = meteringStatement(0, 0)
-    // sum the operations cost
-    return code.reduce(
-      (sum, op) => sum + getCost(op.name, costTable.code)
-      , 0)
-  }
-
-  const branchingOps = new Set(['end', 'br', 'br_table', 'br_if', 'if', 'else', 'return', 'loop'])
-  const meteringOverHead = meterTheMeteringStatement()
-  let code = entry.code.slice()
-  let meteredCode = []
-
-  cost += getCost(entry.locals, costTable.local)
-
-  while (code.length) {
-    let i = 0
-
-    // meters a segment of wasm code
-    while (true) {
-      const op = code[i++]
-      remapOp(op, meterFuncIndex)
-
-      cost += getCost(op.name, costTable.code)
-      if (branchingOps.has(op.name)) {
-        break
-      }
-    }
-
-    // add the metering statement
-    if (cost !== 0) {
-      // add the cost of metering
-      cost += meteringOverHead
-      meteredCode = meteredCode
-        .concat(meteringStatement(cost, meterFuncIndex))
-    }
-
-    // start a new segment
-    meteredCode = meteredCode
-      .concat(code.slice(0, i))
-    code = code.slice(i)
-    cost = 0
-  }
-
-  entry.code = meteredCode
-  return entry
 }
