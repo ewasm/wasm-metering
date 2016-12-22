@@ -27,8 +27,7 @@ Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm
 **Parameters**
 
 -   `json` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the json tobe metered
--   `constTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the cost table to meter with. See these notes about the default.
--   `costTable`  **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `defaultCostTable`)  the cost table to meter with. See these notes about the default.
+-   `constTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the cost table to meter with. See these notes about the default. (optional, default `defaultCostTable`) 
 -   `moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'metering')** the import string for the metering function
 -   `fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'usegas')** the field string for the metering function
 
@@ -45,7 +44,6 @@ Injects metering into a webassembly binary
 
 -   `wasm` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the wasm tobe metered
 -   `constTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the cost table to meter with. See these notes about the default.
--   `costTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `defaultCostTable`)  the cost table to meter with. See these notes about the default.
 -   `moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'metering')** the import string for the metering function
 -   `fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'usegas')** the field string for the metering function
 
