@@ -18,9 +18,9 @@ const meteredWasm = metering.meterWASM(wasm)
 ```
 
 # API
-# meterJSON
+## meterJSON
 
-[./index.js:102-210](https://github.com/ewasm/wasm-metering/blob/ce319c7c12005dd6b902a6bdef839a06336bed0c/./index.js#L102-L210 "Source code on GitHub")
+[./index.js:103-211](https://github.com/ewasm/wasm-metering/blob/25b65245d7dcd74f2a6a13fb090d5075df634231/./index.js#L103-L211 "Source code on GitHub")
 
 Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm-json-toolkit#wasm2json)
 
@@ -28,16 +28,16 @@ Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm
 
 -   `json` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the json tobe metered
 -   `constTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the cost table to meter with. See these notes about the default.
--   `costTable`  
+-   `costTable`   (optional, default `defaultCostTable`)
 -   `moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'metering')** the import string for the metering function
--   `fieldStr` **\[fieldStr](default 'usegas')** the field string for the metering function
+-   `fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'usegas')** the field string for the metering function
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** This contains the fields `initailAmount`, the amount it
 cost to start the module and `module`, the metered json.
 
-# meterWASM
+## meterWASM
 
-[./index.js:221-228](https://github.com/ewasm/wasm-metering/blob/ce319c7c12005dd6b902a6bdef839a06336bed0c/./index.js#L221-L228 "Source code on GitHub")
+[./index.js:222-229](https://github.com/ewasm/wasm-metering/blob/25b65245d7dcd74f2a6a13fb090d5075df634231/./index.js#L222-L229 "Source code on GitHub")
 
 Injects metering into a webassembly binary
 
@@ -47,7 +47,7 @@ Injects metering into a webassembly binary
 -   `constTable` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the cost table to meter with. See these notes about the default.
 -   `costTable`  
 -   `moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'metering')** the import string for the metering function
--   `fieldStr` **\[fieldStr](default 'usegas')** the field string for the metering function
+-   `fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)](default 'usegas')** the field string for the metering function
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** This contains the fields `initailAmount`, the amount it
 cost to start the module and `module`, the metered json.

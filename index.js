@@ -96,7 +96,7 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
  * @param {Object} json the json tobe metered
  * @param {Object} constTable the cost table to meter with. See these notes about the default.
  * @param {String} moduleStr the import string for the metering function
- * @param {fieldStr} fieldStr the field string for the metering function
+ * @param {String} fieldStr the field string for the metering function
  * @return {Object} This contains the fields `initailAmount`, the amount it
  * cost to start the module and `module`, the metered json.
  */
@@ -215,7 +215,7 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
  * @param {Object} wasm the wasm tobe metered
  * @param {Object} constTable the cost table to meter with. See these notes about the default.
  * @param {String} moduleStr the import string for the metering function
- * @param {fieldStr} fieldStr the field string for the metering function
+ * @param {String} fieldStr the field string for the metering function
  * @return {Object} This contains the fields `initailAmount`, the amount it
  * cost to start the module and `module`, the metered json.
  */
