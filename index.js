@@ -205,6 +205,6 @@ exports.meterWASM = (wasm, costTable, moduleStr = 'metering', fieldStr = 'usegas
   json = exports.meterJSON(json, costTable, moduleStr, fieldStr)
   return {
     initailCost: json.initailCost,
-    wasm: toolkit.json2wasm(json)
+    module: toolkit.json2wasm(json.module)
   }
 }

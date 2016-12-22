@@ -1,7 +1,8 @@
 const fs = require('fs')
 const tape = require('tape')
-const metering = require('../').meterJSON
+const metering = require('../')
 const defaultCostTable = require('../defaultCostTable')
+const toolkit = require('wasm-json-toolkit')
 let initCosts = require('./expected-out/initCosts.json')
 
 tape('basic metering tests', t => {
@@ -17,11 +18,22 @@ tape('basic metering tests', t => {
       costTable = defaultCostTable
     }
 
-    let meteredJson = metering(json, costTable)
+    let meteredJson = metering.meterJSON(json, costTable)
     let expectedJson = require(`${__dirname}/expected-out/json/${file}`)
 
     t.deepEquals(meteredJson.module, expectedJson, `${file} - should have the correct json`)
     t.equals(meteredJson.initialCost, initCosts[file])
   }
+  t.end()
+})
+
+tape('wasm test', t => {
+  const json = require('./in/json/basic.wast.json')
+  const expectedJSON = require('./expected-out/json/basic.wast.json')
+  const wasm = toolkit.json2wasm(json)
+  const metered = metering.meterWASM(wasm, defaultCostTable)
+  const meteredJSON = toolkit.wasm2json(metered.module)
+
+  t.deepEquals(meteredJSON, expectedJSON)
   t.end()
 })
