@@ -1,7 +1,7 @@
 const fs = require('fs')
 const tape = require('tape')
 const metering = require('../')
-const defaultCostTable = require('../defaultCostTable')
+const defaultCostTable = require('./defaultCostTable')
 const toolkit = require('wasm-json-toolkit')
 let initCosts = require('./expected-out/initCosts.json')
 
