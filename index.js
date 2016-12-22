@@ -94,7 +94,7 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
 /**
  * Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm-json-toolkit#wasm2json)
  * @param {Object} json the json tobe metered
- * @param {Object} constTable the cost table to meter with. See these notes about the default.
+ * @param {Object} costTable the cost table to meter with. See these notes about the default.
  * @param {String} moduleStr the import string for the metering function
  * @param {String} fieldStr the field string for the metering function
  * @return {Object} This contains the fields `initailAmount`, the amount it
@@ -213,7 +213,7 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
 /**
  * Injects metering into a webassembly binary
  * @param {Object} wasm the wasm tobe metered
- * @param {Object} constTable the cost table to meter with. See these notes about the default.
+ * @param {Object} costTable the cost table to meter with. See these notes about the default.
  * @param {String} moduleStr the import string for the metering function
  * @param {String} fieldStr the field string for the metering function
  * @return {Object} This contains the fields `initailAmount`, the amount it
