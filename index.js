@@ -1,6 +1,7 @@
 const toolkit = require('wasm-json-toolkit')
 const text2json = toolkit.text2json
 const SECTION_IDS = require('wasm-json-toolkit/json2wasm').SECTION_IDS
+const defaultCostTable = require('./defaultCostTable.json')
 
 // gets the cost of an operation for entry in a section from the cost table
 function getCost (json, costTable = {}, defaultCost = 0) {
@@ -90,7 +91,16 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
   return entry
 }
 
-exports.meterJSON = (json, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
+/**
+ * Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm-json-toolkit#wasm2json)
+ * @param {Object} json the json tobe metered
+ * @param {Object} constTable the cost table to meter with. See these notes about the default.
+ * @param {String} moduleStr the import string for the metering function
+ * @param {fieldStr} fieldStr the field string for the metering function
+ * @return {Object} This contains the fields `initailAmount`, the amount it
+ * cost to start the module and `module`, the metered json.
+ */
+exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering', fieldStr = 'usegas') => {
   function findSection (module, sectionName) {
     return module.find(section => section.name === sectionName)
   }
@@ -200,6 +210,15 @@ exports.meterJSON = (json, costTable, moduleStr = 'metering', fieldStr = 'usegas
   }
 }
 
+/**
+ * Injects metering into a webassembly binary
+ * @param {Object} wasm the wasm tobe metered
+ * @param {Object} constTable the cost table to meter with. See these notes about the default.
+ * @param {String} moduleStr the import string for the metering function
+ * @param {fieldStr} fieldStr the field string for the metering function
+ * @return {Object} This contains the fields `initailAmount`, the amount it
+ * cost to start the module and `module`, the metered json.
+ */
 exports.meterWASM = (wasm, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
   let json = toolkit.wasm2json(wasm)
   json = exports.meterJSON(json, costTable, moduleStr, fieldStr)
