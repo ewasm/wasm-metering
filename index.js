@@ -33,9 +33,9 @@ function getCost (json, costTable = {}, defaultCost = 0) {
 }
 
 // meters a single code entrie
-function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
+function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost = 0) {
   function meteringStatement (cost, meteringImportIndex) {
-    return text2json(`i64.const ${cost} call ${meteringImportIndex}`)
+    return text2json(`${meterType}.const ${cost} call ${meteringImportIndex}`)
   }
   function remapOp (op, funcIndex) {
     if (op.name === 'call' && op.immediates >= funcIndex) {
@@ -94,13 +94,15 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, cost = 0) {
 /**
  * Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm-json-toolkit#wasm2json)
  * @param {Object} json the json tobe metered
- * @param {Object} costTable the cost table to meter with. See these notes about the default.
- * @param {String} moduleStr the import string for the metering function
- * @param {String} fieldStr the field string for the metering function
+ * @param {Object} opts
+ * @param {Object} [opts.costTable=defaultTable] the cost table to meter with. See these notes about the default.
+ * @param {String} [opts.moduleStr='metering'] the import string for the metering function
+ * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
+ * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
  * @return {Object} This contains the fields `initailAmount`, the amount it
  * cost to start the module and `module`, the metered json.
  */
-exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering', fieldStr = 'usegas') => {
+exports.meterJSON = (json, opts) => {
   function findSection (module, sectionName) {
     return module.find(section => section.name === sectionName)
   }
@@ -123,6 +125,22 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
     }
   }
 
+  let funcIndex = 0
+  let initialCost = 0
+  let functionModule, typeModule
+
+  let {costTable, moduleStr, fieldStr, meterType} = opts
+
+  // set defaults
+  if (!costTable) costTable = defaultCostTable
+  if (!moduleStr) moduleStr = 'metering'
+  if (!fieldStr) fieldStr = 'usegas'
+  if (!meterType) meterType = 'i64'
+
+  // add nessicarry sections iff they don't exist
+  if (!findSection(json, 'type')) createSection(json, 'type')
+  if (!findSection(json, 'import')) createSection(json, 'import')
+
   const importJson = {
     'moduleStr': moduleStr,
     'fieldStr': fieldStr,
@@ -130,18 +148,10 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
   }
   const importType = {
     'form': 'func',
-    'params': ['i64']
+    'params': [meterType]
   }
 
-  let funcIndex = 0
-  let initialCost = 0
-  let functionModule, typeModule
-
   json = json.slice(0)
-
-  // add nessicarry sections iff they don't exist
-  if (!findSection(json, 'type')) createSection(json, 'type')
-  if (!findSection(json, 'import')) createSection(json, 'import')
 
   for (let section of json) {
     section = Object.assign(section)
@@ -193,7 +203,7 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
           const type = typeModule.entries[typeIndex]
           const cost = getCost(type, costTable.type)
 
-          meterCodeEntry(entry, costTable.code, funcIndex, cost)
+          meterCodeEntry(entry, costTable.code, funcIndex, meterType, cost)
         }
         break
       default:
@@ -212,16 +222,18 @@ exports.meterJSON = (json, costTable = defaultCostTable, moduleStr = 'metering',
 
 /**
  * Injects metering into a webassembly binary
- * @param {Object} wasm the wasm tobe metered
- * @param {Object} costTable the cost table to meter with. See these notes about the default.
- * @param {String} moduleStr the import string for the metering function
- * @param {String} fieldStr the field string for the metering function
+ * @param {Object} json the json tobe metered
+ * @param {Object} opts
+ * @param {Object} [opts.costTable=defaultTable] the cost table to meter with. See these notes about the default.
+ * @param {String} [opts.moduleStr='metering'] the import string for the metering function
+ * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
+ * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
  * @return {Object} This contains the fields `initailAmount`, the amount it
  * cost to start the module and `module`, the metered json.
  */
-exports.meterWASM = (wasm, costTable, moduleStr = 'metering', fieldStr = 'usegas') => {
+exports.meterWASM = (wasm, opts = {}) => {
   let json = toolkit.wasm2json(wasm)
-  json = exports.meterJSON(json, costTable, moduleStr, fieldStr)
+  json = exports.meterJSON(json, opts)
   return {
     initailCost: json.initailCost,
     module: toolkit.json2wasm(json.module)
