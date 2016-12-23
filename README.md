@@ -117,6 +117,8 @@ an interger which will be used as the cost for each entry or an object who's
 keys are matched againt the [JSON repesentation](https://github.com/ewasm/wasm-json-toolkit) of the code.
 The default cost table used is from [here](https://github.com/ewasm/design/blob/metering/determining_wasm_gas_costs.md)
 
+The cost table can use a special key 'DEFAULT' that will be used as the cost value for any fields in a section that are not defined.
+
 ## Initial Cost
 The Intial cost for instantation for the module is calculated from all the 
 sections other than the code section (which is metered at runtime). This infromation is
