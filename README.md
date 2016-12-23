@@ -119,7 +119,7 @@ The default cost table used is from [here](https://github.com/ewasm/design/blob/
 
 ## Initial Cost
 The Intial cost for instantation for the module is calculated from all the 
-other than the code section (which is metered at runtime). This infromation is
+sections other than the code section (which is metered at runtime). This infromation is
 stored as a [custom section](https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md#name-section)
 that is inserted directly after the peramble. It use the the name `initCost` and
 its payload contains the initial cost encoded as an unsigned leb128 interger.
