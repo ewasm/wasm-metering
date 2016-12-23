@@ -8,7 +8,7 @@
 Injects metering into webassembly binaries. The metering counts computation
 time for a given program in units of `gas`. The metered wasm binary expects an 
 import that functions as the gas counter. This works for binary version 0xD.
-For a more detail description of how this works see [metering.md](https://github.com/ewasm/design/blob/metering/metering.md)
+For a more detailed description of how this works see [metering.md](https://github.com/ewasm/design/blob/metering/metering.md)
 
 # INSTALL
 `npm install wasm-metering`
@@ -46,7 +46,7 @@ console.log(`result:${result}, gas used ${gasUsed}`) // result:720, gas used 417
 # API
 ## meterJSON
 
-[./index.js:105-221](https://github.com/ewasm/wasm-metering/blob/029055367151a97736d6a507fa30242e499b64fe/./index.js#L105-L221 "Source code on GitHub")
+[./index.js:104-224](https://github.com/ewasm/wasm-metering/blob/5ab76de89bc07d0abfaa6d0c776c204a752a0d9d/./index.js#L104-L224 "Source code on GitHub")
 
 Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm-json-toolkit#wasm2json)
 
@@ -59,27 +59,25 @@ Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm
     -   `opts.fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the field string for the metering function (optional, default `'usegas'`)
     -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
 
-Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** This contains the fields `initailAmount`, the amount it
-cost to start the module and `module`, the metered json.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the metered json
 
 ## meterWASM
 
-[./index.js:234-241](https://github.com/ewasm/wasm-metering/blob/029055367151a97736d6a507fa30242e499b64fe/./index.js#L234-L241 "Source code on GitHub")
+[./index.js:236-240](https://github.com/ewasm/wasm-metering/blob/5ab76de89bc07d0abfaa6d0c776c204a752a0d9d/./index.js#L236-L240 "Source code on GitHub")
 
 Injects metering into a webassembly binary
 
 **Parameters**
 
 -   `json` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the json tobe metered
--   `opts` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `opts` **\[[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)](default {})** 
     -   `opts.costTable` **\[[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)]** the cost table to meter with. See these notes about the default. (optional, default `defaultTable`)
     -   `opts.moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the import string for the metering function (optional, default `'metering'`)
     -   `opts.fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the field string for the metering function (optional, default `'usegas'`)
     -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
 -   `wasm`  
 
-Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** This contains the fields `initailAmount`, the amount it
-cost to start the module and `module`, the metered json.
+Returns **[Buffer](https://nodejs.org/api/buffer.html)** 
 
 ## costTable
 
@@ -118,6 +116,13 @@ Keys can either map to a function which will be given that sections entries or
 an interger which will be used as the cost for each entry or an object who's
 keys are matched againt the [JSON repesentation](https://github.com/ewasm/wasm-json-toolkit) of the code.
 The default cost table used is from [here](https://github.com/ewasm/design/blob/metering/determining_wasm_gas_costs.md)
+
+## Initial Cost
+The Intial cost for instantation for the module is calculated from all the 
+other than the code section (which is metered at runtime). This infromation is
+stored as a [custom section](https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md#name-section)
+that is inserted directly after the peramble. It use the the name `initCost` and
+its payload contains the initial cost encoded as an unsigned leb128 interger.
 
 # LICENSE
 [MPL-2.0](https://tldrlegal.com/license/mozilla-public-license-2.0-(mpl-2))

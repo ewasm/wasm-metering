@@ -9,8 +9,8 @@ const meteredWasm = metering.meterWASM(wasm, {
 const limit = 90000000
 let gasUsed = 0
 
-const mod = WebAssembly.Module(meteredWasm.module)
-const instance = WebAssembly.Instance(mod, {
+const mod = new WebAssembly.Module(meteredWasm)
+const instance = new WebAssembly.Instance(mod, {
   'metering': {
     'usegas': (gas) => {
       gasUsed += gas

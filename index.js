@@ -1,4 +1,5 @@
 const toolkit = require('wasm-json-toolkit')
+const leb128 = require('leb128/unsigned')
 const text2json = toolkit.text2json
 const SECTION_IDS = require('wasm-json-toolkit/json2wasm').SECTION_IDS
 const defaultCostTable = require('./defaultCostTable.json')
@@ -99,8 +100,7 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost = 0) 
  * @param {String} [opts.moduleStr='metering'] the import string for the metering function
  * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
  * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
- * @return {Object} This contains the fields `initailAmount`, the amount it
- * cost to start the module and `module`, the metered json.
+ * @return {Object} the metered json
  */
 exports.meterJSON = (json, opts) => {
   function findSection (module, sectionName) {
@@ -214,10 +214,14 @@ exports.meterJSON = (json, opts) => {
         }
     }
   }
-  return {
-    initialCost: initialCost,
-    module: json
-  }
+
+  // add custom section with the initial cost
+  json.splice(1, 0, {
+    'name': 'custom',
+    'sectionName': 'initCost',
+    'payload': leb128.encode(initialCost)
+  })
+  return json
 }
 
 /**
@@ -228,14 +232,10 @@ exports.meterJSON = (json, opts) => {
  * @param {String} [opts.moduleStr='metering'] the import string for the metering function
  * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
  * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
- * @return {Object} This contains the fields `initailAmount`, the amount it
- * cost to start the module and `module`, the metered json.
+ * @return {Buffer}
  */
 exports.meterWASM = (wasm, opts = {}) => {
   let json = toolkit.wasm2json(wasm)
   json = exports.meterJSON(json, opts)
-  return {
-    initailCost: json.initailCost,
-    module: toolkit.json2wasm(json.module)
-  }
+  return toolkit.json2wasm(json)
 }

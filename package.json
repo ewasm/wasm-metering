@@ -12,6 +12,7 @@
   "author": "mjbecze <mjbecze@gmail.com>",
   "license": "MPL-2.0",
   "dependencies": {
+    "leb128": "0.0.0",
     "wasm-json-toolkit": "0.1.0"
   },
   "devDependencies": {
@@ -36,6 +37,9 @@
   "standard": {
     "ignore": [
       "test/wabt"
+    ],
+    "globals": [
+      "WebAssembly"
     ]
   }
 }

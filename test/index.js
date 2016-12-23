@@ -1,5 +1,6 @@
 const fs = require('fs')
 const tape = require('tape')
+const leb128 = require('leb128/unsigned')
 const metering = require('../')
 const defaultCostTable = require('./defaultCostTable')
 const toolkit = require('wasm-json-toolkit')
@@ -21,10 +22,12 @@ tape('basic metering tests', t => {
     let meteredJson = metering.meterJSON(json, {
       costTable: costTable
     })
+
+    const initialCost = meteredJson.splice(1, 1)[0]
     let expectedJson = require(`${__dirname}/expected-out/json/${file}`)
 
-    t.deepEquals(meteredJson.module, expectedJson, `${file} - should have the correct json`)
-    t.equals(meteredJson.initialCost, initCosts[file])
+    t.deepEquals(meteredJson, expectedJson, `${file} - should have the correct json`)
+    t.equals(leb128.decode(initialCost.payload), initCosts[file].toString())
   }
   t.end()
 })
@@ -36,8 +39,9 @@ tape('wasm test', t => {
   const metered = metering.meterWASM(wasm, {
     costTable: defaultCostTable
   })
-  let meteredJSON = toolkit.wasm2json(metered.module)
+  let meteredJSON = toolkit.wasm2json(metered)
 
+  meteredJSON.splice(1, 1)
   t.deepEquals(meteredJSON, expectedJSON)
 
   const meteredWasm = metering.meterWASM(wasm, {
@@ -46,7 +50,8 @@ tape('wasm test', t => {
     moduleStr: 'test'
   })
 
-  meteredJSON = toolkit.wasm2json(meteredWasm.module)
+  meteredJSON = toolkit.wasm2json(meteredWasm)
+  meteredJSON.splice(1, 1)
   t.equals(meteredJSON[2].entries[0].moduleStr, 'test')
   t.equals(meteredJSON[2].entries[0].fieldStr, 'test')
   t.equals(meteredJSON[1].entries[1].params[0], 'i32')
