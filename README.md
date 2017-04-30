@@ -18,7 +18,7 @@ For a more detailed description of how this works see [metering.md](https://gith
 const fs = require('fs')
 const metering = require('wasm-metering')
 
-const wasm = fs.readFileSync(`fac.wasm`)
+const wasm = fs.readFileSync('fac.wasm')
 const meteredWasm = metering.meterWASM(wasm, {
   meterType: 'i32'
 })
