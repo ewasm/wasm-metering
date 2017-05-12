@@ -18,7 +18,7 @@
   "devDependencies": {
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.1",
-    "standard": "^8.6.0",
+    "standard": "^10.0.2",
     "tape": "^4.6.3"
   },
   "keywords": [
