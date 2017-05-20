@@ -1,6 +1,5 @@
 # SYNOPSIS 
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/ewasm/wasm-metering.svg)](https://greenkeeper.io/)
 [![NPM Package](https://img.shields.io/npm/v/wasm-metering.svg?style=flat-square)](https://www.npmjs.org/package/wasm-metering)
 [![Build Status](https://img.shields.io/travis/ewasm/wasm-metering.svg?branch=master&style=flat-square)](https://travis-ci.org/ewasm/wasm-metering)
 [![Coverage Status](https://img.shields.io/coveralls/ewasm/wasm-metering.svg?style=flat-square)](https://coveralls.io/r/ewasm/wasm-metering)
