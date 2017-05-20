@@ -58,4 +58,3 @@ tape('wasm test', t => {
 
   t.end()
 })
-
