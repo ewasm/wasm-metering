@@ -12,7 +12,7 @@
   "author": "mjbecze <mjbecze@gmail.com>",
   "license": "MPL-2.0",
   "dependencies": {
-    "leb128": "0.0.0",
+    "leb128": "0.0.2",
     "wasm-json-toolkit": "0.1.0"
   },
   "devDependencies": {
