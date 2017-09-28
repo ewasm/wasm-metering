@@ -16,7 +16,7 @@
     "wasm-json-toolkit": "0.1.0"
   },
   "devDependencies": {
-    "coveralls": "^2.11.4",
+    "coveralls": "^3.0.0",
     "istanbul": "^0.4.1",
     "standard": "^10.0.2",
     "tape": "^4.6.3"
