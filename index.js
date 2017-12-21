@@ -52,7 +52,7 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost = 0) 
   }
 
   // operations that can possible cause a branch
-  const branchingOps = new Set(['end', 'br', 'br_table', 'br_if', 'if', 'else', 'return', 'loop'])
+  const branchingOps = new Set(['grow_memory', 'end', 'br', 'br_table', 'br_if', 'if', 'else', 'return', 'loop'])
   const meteringOverHead = meterTheMeteringStatement()
   let code = entry.code.slice()
   let meteredCode = []
@@ -107,8 +107,8 @@ exports.meterJSON = (json, opts) => {
     return module.find(section => section.name === sectionName)
   }
 
-  function createSection (module, sectionName) {
-    const newSectionId = SECTION_IDS[sectionName]
+  function createSection (module, name) {
+    const newSectionId = SECTION_IDS[name]
     for (let index in module) {
       const section = module[index]
       const sectionId = SECTION_IDS[section.name]
@@ -116,7 +116,7 @@ exports.meterJSON = (json, opts) => {
         if (newSectionId < sectionId) {
           // inject a new section
           module.splice(index, 0, {
-            name: sectionName,
+            name,
             entries: []
           })
           return
