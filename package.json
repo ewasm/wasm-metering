@@ -9,7 +9,13 @@
     "lint": "standard",
     "test": "node --harmony ./test/index.js"
   },
+  "bin": {
+    "wasm-metering": "./bin/wasm-metering"
+  },
   "author": "mjbecze <mjbecze@gmail.com>",
+  "contributors": [
+    "Alex Beregszaszi <alex@rtfs.hu>"
+  ],
   "license": "MPL-2.0",
   "dependencies": {
     "leb128": "^0.0.4",
