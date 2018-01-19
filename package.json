@@ -13,7 +13,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "leb128": "^0.0.4",
-    "wasm-json-toolkit": "0.1.1"
+    "wasm-json-toolkit": "0.2.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
