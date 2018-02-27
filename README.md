@@ -58,7 +58,7 @@ Injects metering into a JSON output of [wasm2json](https://github.com/ewasm/wasm
     -   `opts.costTable` **\[[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)]** the cost table to meter with. See these notes about the default. (optional, default `defaultTable`)
     -   `opts.moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the import string for the metering function (optional, default `'metering'`)
     -   `opts.fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the field string for the metering function (optional, default `'usegas'`)
-    -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
+    -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the register type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the metered json
 
@@ -75,7 +75,7 @@ Injects metering into a webassembly binary
     -   `opts.costTable` **\[[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)]** the cost table to meter with. See these notes about the default. (optional, default `defaultTable`)
     -   `opts.moduleStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the import string for the metering function (optional, default `'metering'`)
     -   `opts.fieldStr` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the field string for the metering function (optional, default `'usegas'`)
-    -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
+    -   `opts.meterType` **\[[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)]** the register type that is used to meter. Can be `i64`, `i32`, `f64`, `f32` (optional, default `'i64'`)
 -   `wasm`  
 
 Returns **[Buffer](https://nodejs.org/api/buffer.html)** 
@@ -83,7 +83,7 @@ Returns **[Buffer](https://nodejs.org/api/buffer.html)**
 ## costTable
 
 The costTable option defines the cost of each of the operations.
-Cost Tables consist of an object whos keys are section in a wasm binary. 
+Cost Tables consist of an object whose keys are sections in a wasm binary. 
 For example
 ```
 module.exports = {
@@ -113,18 +113,18 @@ module.exports = {
 
 ```
 
-Keys can either map to a function which will be given that sections entries or
-an interger which will be used as the cost for each entry or an object who's
-keys are matched againt the [JSON repesentation](https://github.com/ewasm/wasm-json-toolkit) of the code.
-The default cost table used is from [here](https://github.com/ewasm/design/blob/metering/determining_wasm_gas_costs.md)
+Keys can either map to a function which will be given that section's entries or
+an integer which will be used as the cost for each entry or an object whose
+keys are matched against the [JSON representation](https://github.com/ewasm/wasm-json-toolkit) of the code.
+The default cost table used is from [here](https://github.com/ewasm/design/blob/master/determining_wasm_gas_costs.md)
 
 The cost table can use a special key 'DEFAULT' that will be used as the cost value for any fields in a section that are not defined.
 
 ## Initial Cost
-The Intial cost for instantation for the module is calculated from all the 
-sections other than the code section (which is metered at runtime). This infromation is
+The Initial cost for instantation for the module is calculated from all the 
+sections other than the code section (which is metered at runtime). This information is
 stored as a [custom section](https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md#name-section)
-that is inserted directly after the peramble. It use the the name `initCost` and
+that is inserted directly after the preamble. It uses the the name `initCost` and
 its payload contains the initial cost encoded as an unsigned leb128 interger.
 
 # LICENSE
