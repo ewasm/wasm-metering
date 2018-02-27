@@ -99,7 +99,7 @@ function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost = 0) 
  * @param {Object} [opts.costTable=defaultTable] the cost table to meter with. See these notes about the default.
  * @param {String} [opts.moduleStr='metering'] the import string for the metering function
  * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
- * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
+ * @param {String} [opts.meterType='i64'] the register type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
  * @return {Object} the metered json
  */
 exports.meterJSON = (json, opts) => {
@@ -231,7 +231,7 @@ exports.meterJSON = (json, opts) => {
  * @param {Object} [opts.costTable=defaultTable] the cost table to meter with. See these notes about the default.
  * @param {String} [opts.moduleStr='metering'] the import string for the metering function
  * @param {String} [opts.fieldStr='usegas'] the field string for the metering function
- * @param {String} [opts.meterType='i64'] the regerster type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
+ * @param {String} [opts.meterType='i64'] the register type that is used to meter. Can be `i64`, `i32`, `f64`, `f32`
  * @return {Buffer}
  */
 exports.meterWASM = (wasm, opts = {}) => {
