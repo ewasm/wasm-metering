@@ -116,7 +116,7 @@ module.exports = {
 Keys can either map to a function which will be given that section's entries or
 an integer which will be used as the cost for each entry or an object whose
 keys are matched against the [JSON representation](https://github.com/ewasm/wasm-json-toolkit) of the code.
-The default cost table used is from [here](https://github.com/ewasm/design/blob/metering/determining_wasm_gas_costs.md)
+The default cost table used is from [here](https://github.com/ewasm/design/blob/master/determining_wasm_gas_costs.md)
 
 The cost table can use a special key 'DEFAULT' that will be used as the cost value for any fields in a section that are not defined.
 
