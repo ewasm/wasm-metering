@@ -8,7 +8,7 @@
 
 Injects metering into webassembly binaries. The metering counts computation
 time for a given program in units of `gas`. The metered wasm binary expects an 
-import that functions as the gas counter. This works for binary version 0xD.
+import that functions as the gas counter. This works for binary version 0x1.
 For a more detailed description of how this works see [metering.md](https://github.com/ewasm/design/blob/master/metering.md)
 
 # INSTALL
@@ -40,7 +40,7 @@ const instance = WebAssembly.Instance(mod, {
 })
 
 const result = instance.exports.fac(6)
-console.log(`result:${result}, gas used ${gasUsed}`) // result:720, gas used 4177
+console.log(`result:${result}, gas used ${gasUsed * 1e-4}`) // result:720, gas used 0.4177
 ```
 [Source](./example/index.js)
 

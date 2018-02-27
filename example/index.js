@@ -22,4 +22,4 @@ const instance = new WebAssembly.Instance(mod, {
 })
 
 const result = instance.exports.fac(6)
-console.log(`result:${result}, gas used ${gasUsed}`) // result:720, gas used 4177
+console.log(`result:${result}, gas used ${gasUsed * 1e-4}`) // result:720, gas used 0.4177
