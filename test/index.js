@@ -4,6 +4,20 @@ const metering = require('../')
 const defaultCostTable = require('./defaultCostTable')
 const toolkit = require('wasm-json-toolkit')
 
+tape('basic test', t => {
+  const json = JSON.parse(fs.readFileSync(`${__dirname}/in/json/basic.wast.json`).toString())
+  const wasm = toolkit.json2wasm(json)
+
+  const meteredWasm = metering.meterWASM(wasm)
+
+  const meteredJSON = toolkit.wasm2json(meteredWasm)
+  t.equals(meteredJSON[2].entries[0].moduleStr, 'metering')
+  t.equals(meteredJSON[2].entries[0].fieldStr, 'usegas')
+  t.equals(meteredJSON[1].entries[1].params[0], 'i32')
+
+  t.end()
+})
+
 tape('basic metering tests', t => {
   let files = fs.readdirSync(`${__dirname}/in/json`)
   // files = ['zeroCostOps.wast.json']
