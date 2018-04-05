@@ -1,7 +1,6 @@
 (module
   (type $a (func(param i32 i32) (result i32)))   
   (type $b (func(param i64)))
-  (import "metering" "usegas" (func (type $b)))
   (import "teat" "adf" (global i64))
   (func $addTwo (type $a)
     (i32.add

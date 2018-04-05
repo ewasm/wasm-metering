@@ -37,12 +37,6 @@
     "name": "import",
     "entries": [
       {
-        "moduleStr": "metering",
-        "fieldStr": "usegas",
-        "kind": "function",
-        "type": 1
-      },
-      {
         "moduleStr": "teat",
         "fieldStr": "adf",
         "kind": "global",
@@ -65,7 +59,7 @@
       {
         "field_str": "addTwo",
         "kind": "function",
-        "index": 1
+        "index": 0
       }
     ]
   },

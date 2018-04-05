@@ -3,14 +3,14 @@ const wabt = require('wabt')
 const metering = require('../')
 
 function inject (wat) {
-  const mod = wabt.parseWast('module.wast', wat)
+  const mod = wabt.parseWat('module.wast', wat)
   const binary = mod.toBinary({log: true})
   console.log('here', binary)
   const meteredCode = metering.meterWASM(Buffer.from(binary.buffer))
   const textMod = wabt.readWasm(meteredCode, { readDebugNames: true })
   textMod.generateNames()
   textMod.applyNames()
-  const text = textMod.toText({ foldExprs: false, inlineExport: false })
+  const text = textMod.toText({ foldExprs: true, inlineExport: false })
   document.getElementById('result').innerHTML = text
 }
 

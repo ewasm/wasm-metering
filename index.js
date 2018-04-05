@@ -1,5 +1,4 @@
 const toolkit = require('wasm-json-toolkit')
-const leb128 = require('leb128/unsigned')
 const text2json = toolkit.text2json
 const SECTION_IDS = require('wasm-json-toolkit/json2wasm').SECTION_IDS
 const defaultCostTable = require('./defaultCostTable.json')
@@ -10,14 +9,10 @@ function getCost (json, costTable = {}, defaultCost = 0) {
   // finds the default cost
   defaultCost = costTable['DEFAULT'] !== undefined ? costTable['DEFAULT'] : 0
 
-  if (typeof costTable === 'function') {
-    cost = costTable(json)
-  } else if (Array.isArray(json)) {
+  if (Array.isArray(json)) {
     json.forEach(el => {
       cost += getCost(el, costTable)
     })
-  } else if (typeof costTable === 'number') {
-    cost = costTable
   } else if (typeof json === 'object') {
     for (const propName in json) {
       const propCost = costTable[propName]
@@ -34,7 +29,7 @@ function getCost (json, costTable = {}, defaultCost = 0) {
 }
 
 // meters a single code entrie
-function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost = 0) {
+function meterCodeEntry (entry, costTable, meterFuncIndex, meterType, cost) {
   function meteringStatement (cost, meteringImportIndex) {
     return text2json(`${meterType}.const ${cost} call ${meteringImportIndex}`)
   }
@@ -126,7 +121,6 @@ exports.meterJSON = (json, opts) => {
   }
 
   let funcIndex = 0
-  let initialCost = 0
   let functionModule, typeModule
 
   let {costTable, moduleStr, fieldStr, meterType} = opts
@@ -135,7 +129,7 @@ exports.meterJSON = (json, opts) => {
   if (!costTable) costTable = defaultCostTable
   if (!moduleStr) moduleStr = 'metering'
   if (!fieldStr) fieldStr = 'usegas'
-  if (!meterType) meterType = 'i64'
+  if (!meterType) meterType = 'i32'
 
   // add nessicarry sections iff they don't exist
   if (!findSection(json, 'type')) createSection(json, 'type')
@@ -168,7 +162,9 @@ exports.meterJSON = (json, opts) => {
         break
       case 'import':
         for (const entry of section.entries) {
-          initialCost += getCost(entry, costTable.import)
+          if (entry.moduleStr === moduleStr && entry.fieldStr === fieldStr) {
+            throw new Error('importing meteing function is not allowed')
+          }
           if (entry.kind === 'function') {
             funcIndex++
           }
@@ -178,7 +174,6 @@ exports.meterJSON = (json, opts) => {
         break
       case 'export':
         for (const entry of section.entries) {
-          initialCost += getCost(entry, costTable.global)
           if (entry.kind === 'function' && entry.index >= funcIndex) {
             entry.index++
           }
@@ -186,13 +181,11 @@ exports.meterJSON = (json, opts) => {
         break
       case 'element':
         for (const entry of section.entries) {
-          initialCost += getCost(entry, costTable.element)
           // remap elements indices
           entry.elements = entry.elements.map(el => el >= funcIndex ? ++el : el)
         }
         break
       case 'start':
-        initialCost += getCost(section, costTable.start)
         // remap start index
         if (section.index >= funcIndex) section.index++
         break
@@ -206,21 +199,9 @@ exports.meterJSON = (json, opts) => {
           meterCodeEntry(entry, costTable.code, funcIndex, meterType, cost)
         }
         break
-      default:
-        if (section.entries) {
-          for (const entry of section.entries) {
-            initialCost += getCost(entry, costTable[section.name])
-          }
-        }
     }
   }
 
-  // add custom section with the initial cost
-  json.splice(1, 0, {
-    'name': 'custom',
-    'sectionName': 'initCost',
-    'payload': leb128.encode(initialCost)
-  })
   return json
 }
 

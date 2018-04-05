@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bel": "^5.1.5",
-    "tachyons": "^4.9.0",
-    "wabt": "0.0.13"
+    "bel": "^6.0.0",
+    "tachyons": "^4.9.1",
+    "wabt": "1.0.0"
   }
 }

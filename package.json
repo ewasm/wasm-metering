@@ -21,6 +21,9 @@
     "leb128": "^0.0.4",
     "wasm-json-toolkit": "0.2.3"
   },
+  "bin": {
+    "wasm-meter": "./bin/wasm-meter"
+  },
   "devDependencies": {
     "coveralls": "^3.0.0",
     "nyc": "^11.4.1",
