@@ -10,7 +10,7 @@
     "test": "node --harmony ./test/index.js"
   },
   "bin": {
-    "wasm-metering": "./bin/wasm-metering"
+    "wasm-meter": "./bin/wasm-meter"
   },
   "author": "mjbecze <mjbecze@gmail.com>",
   "contributors": [
@@ -21,14 +21,11 @@
     "leb128": "^0.0.4",
     "wasm-json-toolkit": "0.2.3"
   },
-  "bin": {
-    "wasm-meter": "./bin/wasm-meter"
-  },
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "nyc": "^11.4.1",
+    "nyc": "^11.6.0",
     "standard": "^11.0.0",
-    "tape": "^4.6.3"
+    "tape": "^4.9.0"
   },
   "keywords": [
     "wasm",

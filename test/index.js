@@ -20,7 +20,7 @@ tape('basic metering tests', t => {
 
     try {
       let meteredJson = metering.meterJSON(json, {
-        costTable: costTable
+        costTable
       })
 
       let expectedJson = require(`${__dirname}/expected-out/json/${file}`)
@@ -34,15 +34,7 @@ tape('basic metering tests', t => {
 
 tape('wasm test', t => {
   const json = require('./in/json/basic.wast.json')
-  // const expectedJSON = require('./expected-out/json/basic.wast.json')
   const wasm = toolkit.json2wasm(json)
-  // const metered = metering.meterWASM(wasm, {
-  //   costTable: defaultCostTable
-  // })
-  // let meteredJSON = toolkit.wasm2json(metered)
-
-  // meteredJSON.splice(1, 1)
-  // t.deepEquals(meteredJSON, expectedJSON)
 
   const meteredWasm = metering.meterWASM(wasm, {
     meterType: 'i32',
@@ -51,7 +43,6 @@ tape('wasm test', t => {
   })
 
   const meteredJSON = toolkit.wasm2json(meteredWasm)
-  // meteredJSON.splice(1, 1)
   t.equals(meteredJSON[2].entries[0].moduleStr, 'test')
   t.equals(meteredJSON[2].entries[0].fieldStr, 'test')
   t.equals(meteredJSON[1].entries[1].params[0], 'i32')
