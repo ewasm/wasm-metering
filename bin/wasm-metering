@@ -1,8 +1,0 @@
-#!/usr/bin/env node
-
-const fs = require('fs')
-const metering = require('../index.js')
-
-const input = fs.readFileSync(process.argv[2])
-const output = metering.meterWASM(input, { moduleStr: 'ethereum', fieldStr: 'useGas', meterType: 'i64' })
-fs.writeFileSync(process.argv[3], output)

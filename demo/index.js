@@ -1,4 +1,4 @@
-const bel = require('bel')
+const html = require('nanohtml')
 const wabt = require('wabt')
 const metering = require('../')
 
@@ -14,7 +14,7 @@ function inject (wat) {
   document.getElementById('result').innerHTML = text
 }
 
-const textarea = bel`<div>
+const textarea = html`<div>
   <textarea style="float:left" id="watInput" rows="50" cols="50"></textarea>
   <button onclick=${function () {
     const wat = document.getElementById('watInput').value

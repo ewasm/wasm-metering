@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "bel": "^6.0.0",
+    "browserify": "^16.1.1",
+    "nanohtml": "^1.2.2",
     "tachyons": "^4.9.1",
     "wabt": "1.0.0"
   }
