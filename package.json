@@ -1,6 +1,6 @@
 {
   "name": "wasm-metering",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "injects metering into webassembly binaries",
   "main": "index.js",
   "scripts": {
