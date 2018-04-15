@@ -163,7 +163,7 @@ exports.meterJSON = (json, opts) => {
       case 'import':
         for (const entry of section.entries) {
           if (entry.moduleStr === moduleStr && entry.fieldStr === fieldStr) {
-            throw new Error('importing meteing function is not allowed')
+            throw new Error('importing metering function is not allowed')
           }
           if (entry.kind === 'function') {
             funcIndex++
