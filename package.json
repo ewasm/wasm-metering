@@ -24,7 +24,7 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "nyc": "^11.6.0",
-    "standard": "^11.0.0",
+    "standard": "^14.0.0",
     "tape": "^4.9.0"
   },
   "keywords": [
