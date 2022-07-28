@@ -124,7 +124,7 @@ The cost table can use a special key 'DEFAULT' that will be used as the cost val
 The Initial cost for instantation for the module is calculated from all the 
 sections other than the code section (which is metered at runtime). This information is
 stored as a [custom section](https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md#name-section)
-that is inserted directly after the preamble. It uses the the name `initCost` and
+that is inserted directly after the preamble. It uses the name `initCost` and
 its payload contains the initial cost encoded as an unsigned leb128 interger.
 
 # LICENSE
